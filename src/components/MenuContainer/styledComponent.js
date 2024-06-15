@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
 const MenuItem = styled.p`
-  color: ${props => (props.lightTheme ? '#fff' : '#000')};
+  color: ${props => (props.lightMode ? '#000' : '#fff')};
 `
 export default MenuItem

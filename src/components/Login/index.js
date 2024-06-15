@@ -1,5 +1,6 @@
 import Cookies from 'js-cookie'
 import {Component} from 'react'
+import {Redirect} from 'react-router-dom'
 import {
   LoginContainer,
   FormElement,
@@ -7,6 +8,7 @@ import {
   LoginInput,
 } from './styledComponents'
 import {ThemeContext} from '../../ThemeContext'
+import constants from '../constants'
 import './index.css'
 
 class Login extends Component {
@@ -62,28 +64,26 @@ class Login extends Component {
 
   render() {
     const {username, password, errorMsg, showError} = this.state
+    const {logoIcon} = constants
+
+    const token = Cookies.get('jwt-token')
+    if (token !== undefined) {
+      return <Redirect to="/" />
+    }
 
     return (
       <ThemeContext.Consumer>
         {theme => {
           const {lightMode} = theme
-          console.log('the theme is', lightMode)
+          const logoSrc = lightMode ? logoIcon.light : logoIcon.dark
+
           return (
             <LoginContainer bgColor={lightMode ? '' : '#212121'}>
               <FormElement
                 bgColor={lightMode ? '' : '#000'}
-                className="login-form"
                 onSubmit={this.handleLogin}
               >
-                <img
-                  src={
-                    lightMode
-                      ? 'https://assets.ccbp.in/frontend/react-js/nxt-watch-logo-light-theme-img.png'
-                      : 'https://assets.ccbp.in/frontend/react-js/nxt-watch-logo-dark-theme-img.png'
-                  }
-                  alt="logo"
-                  className="login-app-logo"
-                />
+                <img src={logoSrc} alt="logo" className="login-app-logo" />
                 <div className="login-labels-container">
                   <Label>USERNAME</Label>
                   <LoginInput

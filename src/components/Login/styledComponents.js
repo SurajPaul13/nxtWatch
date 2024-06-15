@@ -17,7 +17,12 @@ export const FormElement = styled.form`
   padding: 30px;
   box-shadow: 3px 5px 10px #212121;
   border-radius: 10px;
-  width: 100%;
+  min-width: 360px;
+  width: 80%;
+
+  @media (min-width: 768px) {
+    width: 600px;
+  }
 `
 
 export const Label = styled.label`

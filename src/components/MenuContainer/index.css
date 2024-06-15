@@ -1,0 +1,42 @@
+.menu-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+@media (min-width: 768px) {
+  .menu-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+  }
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding-left: 20px;
+}
+
+.menu-item:hover {
+  background-color: #e2e8f0;
+  color: red;
+}
+
+.menu-item:hover p,
+.menu-item:hover .menu-icon {
+  color: red !important;
+  font-weight: bold;
+}
+
+.dark {
+  color: #fff !important;
+}
+
+.menu-icon {
+  height: 26px;
+  width: 26px;
+  margin-right: 20px;
+}

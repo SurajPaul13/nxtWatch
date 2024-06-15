@@ -1,0 +1,19 @@
+.thumbnail-details-container {
+  display: flex;
+  margin: 10px;
+  margin-bottom: 20px;
+}
+
+@media (min-width: 768px) {
+  .thumbnail-container {
+    width: 250px;
+  }
+}
+
+.profile-img {
+  height: 25px;
+}
+
+.video-details-container {
+  margin-left: 10px;
+}
