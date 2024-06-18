@@ -1,4 +1,4 @@
-const constants = {
+export const iconConstants = {
   logoIcon: {
     light:
       'https://assets.ccbp.in/frontend/react-js/nxt-watch-logo-light-theme-img.png',
@@ -17,7 +17,7 @@ const constants = {
     light: 'https://img.icons8.com/windows/32/exit.png',
     dark: 'https://img.icons8.com/pixels/32/FFFFFF/exit.png',
   },
-  failureView: {
+  failureViewIcon: {
     light:
       'https://assets.ccbp.in/frontend/react-js/nxt-watch-failure-view-light-theme-img.png',
     dark:
@@ -25,4 +25,9 @@ const constants = {
   },
 }
 
-export default constants
+export const apiStatusConstants = {
+  initial: 'INITIAL',
+  success: 'SUCCESS',
+  failure: 'FAILURE',
+  loading: 'LOADING',
+}

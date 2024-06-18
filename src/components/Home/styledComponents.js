@@ -7,12 +7,12 @@ export const HomeVideosContainer = styled.div`
   height: 100%;
 `
 
-export const FailureHeading = styled.h3`
+export const WarningHeading = styled.h3`
   color: ${props => (props.lightMode ? '#231f20' : '#fff')};
   margin: 5px;
 `
 
-export const FailureDescription = styled.p`
+export const WarningDescription = styled.p`
   color: ${props => (props.lightMode ? '#475569' : '#94a3b8')};
   margin: 5px;
 `
@@ -26,4 +26,8 @@ export const SearchInput = styled.input`
   height: 100%;
   color: ${props => (props.lightMode ? '#181818' : '#f9f9f9')};
   background-color: ${props => (props.lightMode ? '#f9f9f9' : '#181818')};
+`
+
+export const ContactUsHeading = styled.h3`
+  color: ${props => (props.lightMode ? '' : '')};
 `

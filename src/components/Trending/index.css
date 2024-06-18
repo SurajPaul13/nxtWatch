@@ -1,0 +1,15 @@
+.trending-heading {
+  display: flex;
+}
+
+.trending-videos-container {
+  display: flex;
+  flex-direction: column;
+}
+
+@media (min-width: 768px) {
+  .trending-videos-container {
+    display: flex;
+    flex-direction: row;
+  }
+}

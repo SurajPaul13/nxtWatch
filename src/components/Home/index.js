@@ -1,25 +1,19 @@
 import {useState, useContext, useMemo} from 'react'
-import Loader from 'react-loader-spinner'
 import Cookies from 'js-cookie'
 import {IoIosSearch} from 'react-icons/io'
 import NavBar from '../NavBar'
-import constants from '../constants'
+import {iconConstants, apiStatusConstants} from '../constants'
 import {ThemeContext} from '../../ThemeContext'
+import LoaderComponent from '../LoaderComponent'
 import HomeVideoThumbnail from '../HomeVideoThumbnail'
+import FailureView from '../FailureView'
 import {
   SearchInput,
-  FailureHeading,
-  FailureDescription,
+  WarningHeading,
+  WarningDescription,
 } from './styledComponents'
 import './index.css'
-import MenuContainer from '../MenuContainer'
-
-const apiStatusConstants = {
-  initial: 'INITIAL',
-  success: 'SUCCESS',
-  failure: 'FAILURE',
-  loading: 'LOADING',
-}
+import SideBar from '../Sidebar'
 
 const Home = () => {
   const [apiStatus, setApiStatus] = useState(apiStatusConstants.initial)
@@ -27,7 +21,7 @@ const Home = () => {
   const [showIntro, hideIntro] = useState(true)
   const [search, setSearch] = useState('')
   const {lightMode} = useContext(ThemeContext)
-  const {logoIcon, failureView} = constants
+  const {logoIcon} = iconConstants
 
   const fetchHomeVideos = async () => {
     setApiStatus(apiStatusConstants.loading)
@@ -79,17 +73,6 @@ const Home = () => {
     setSearch('')
   }
 
-  const RenderLoader = () => (
-    <div className="loader-container">
-      <Loader
-        type="ThreeDots"
-        color={`${lightMode ? '#000' : '#fff'}`}
-        height="50"
-        width="50"
-      />
-    </div>
-  )
-
   const NoSearchResults = () => (
     <div className="failure-view-container">
       <img
@@ -98,12 +81,12 @@ const Home = () => {
         height="300px"
         className="failure-img"
       />
-      <FailureHeading lightMode={lightMode}>
+      <WarningHeading lightMode={lightMode}>
         No search results found
-      </FailureHeading>
-      <FailureDescription lightMode={lightMode}>
+      </WarningHeading>
+      <WarningDescription lightMode={lightMode}>
         Try different keyword or remove search filter
-      </FailureDescription>
+      </WarningDescription>
       <button className="retry-btn" type="button" onClick={retrySearch}>
         Retry
       </button>
@@ -155,33 +138,10 @@ const Home = () => {
     )
   }
 
-  const FailureView = () => (
-    <div className="failure-view-container">
-      <img
-        src={`${lightMode ? failureView.light : failureView.dark}`}
-        alt="failure view"
-        height="300px"
-        className="failure-img"
-      />
-      <FailureHeading lightMode={lightMode}>
-        Oops! Something Went Wrong
-      </FailureHeading>
-      <FailureDescription lightMode={lightMode}>
-        We are having some trouble to complete your request.
-      </FailureDescription>
-      <FailureDescription lightMode={lightMode}>
-        Please try again
-      </FailureDescription>
-      <button className="retry-btn" type="button" onClick={fetchHomeVideos}>
-        Retry
-      </button>
-    </div>
-  )
-
   const renderPageContent = () => {
     switch (apiStatus) {
       case apiStatusConstants.loading:
-        return <RenderLoader />
+        return <LoaderComponent />
 
       case apiStatusConstants.success:
         return <HomeVideos />
@@ -196,14 +156,12 @@ const Home = () => {
 
   return (
     <div
-      className="home"
+      className="main-app"
       style={{backgroundColor: lightMode ? '#f9f9f9' : '#181818'}}
     >
       <NavBar />
       <div className="home-container">
-        <div className="medium-screen-menu-container">
-          <MenuContainer />
-        </div>
+        <SideBar />
         <div className="banner-and-videos-container">
           <HomeBanner />
           <div className="videos-and-search-container">

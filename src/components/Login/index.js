@@ -8,7 +8,7 @@ import {
   LoginInput,
 } from './styledComponents'
 import {ThemeContext} from '../../ThemeContext'
-import constants from '../constants'
+import {iconConstants} from '../constants'
 import './index.css'
 
 class Login extends Component {
@@ -64,7 +64,7 @@ class Login extends Component {
 
   render() {
     const {username, password, errorMsg, showError} = this.state
-    const {logoIcon} = constants
+    const {logoIcon} = iconConstants
 
     const token = Cookies.get('jwt-token')
     if (token !== undefined) {

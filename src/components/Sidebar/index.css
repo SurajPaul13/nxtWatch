@@ -1,0 +1,25 @@
+.side-bar {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .side-bar {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 250px;
+    height: 90vh;
+  }
+}
+
+.contact-us-section {
+  padding: 20px;
+}
+
+.contact-us-icons {
+  display: flex;
+  justify-content: space-between;
+  width: 150px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
