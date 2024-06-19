@@ -10,7 +10,7 @@ const NavBar = () => {
 
   const {lightMode, toggleTheme} = useContext(ThemeContext)
 
-  const {history} = useHistory()
+  const history = useHistory()
 
   const changeTheme = () => {
     toggleTheme()
@@ -45,23 +45,36 @@ const NavBar = () => {
     <>
       <div className="navbar">
         <Link to="/">
-          <img height="30" src={appLogo} alt="logo" />
+          <img height="20" src={appLogo} alt="logo" />
         </Link>
         <div className="nav-btn-container">
           <button type="button" className="nav-button" onClick={changeTheme}>
-            <img width="30" height="30" src={themeIcon} alt="theme button" />
+            <img
+              className="theme-icon"
+              width="20"
+              height="20"
+              src={themeIcon}
+              alt="theme button"
+            />
           </button>
           <button
             type="button"
             className="nav-button hide-hamburger-menu"
             onClick={handleMenu}
           >
-            <img width="30" height="30" src={menuIcon} alt="menu button" />
+            <img
+              className="theme-icon"
+              width="20"
+              height="20"
+              src={menuIcon}
+              alt="menu button"
+            />
           </button>
           <button type="button" className="nav-button hide-profile-menu">
             <img
-              width="30"
-              height="30"
+              className="theme-icon"
+              width="20"
+              height="20"
               src="https://assets.ccbp.in/frontend/react-js/nxt-watch-profile-img.png"
               alt="profile"
             />
@@ -72,11 +85,11 @@ const NavBar = () => {
             onClick={handleLogout}
           >
             <img
-              width="30"
-              height="30"
+              className="theme-icon logout-icon"
+              width="20"
+              height="20"
               src={logoutIcon}
               alt="logout button"
-              className="logout-icon"
             />
             <p className="logout-label">Logout</p>
           </button>

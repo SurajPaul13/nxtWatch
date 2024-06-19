@@ -1,0 +1,32 @@
+.bg-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.body-container {
+  display: flex;
+  flex-grow: 1;
+}
+
+.page-heading {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  height: 60px;
+}
+
+.menu-videos-container {
+  display: flex;
+  flex-direction: column;
+}
+
+@media (min-width: 768px) {
+  .menu-videos-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    padding: 10px;
+  }
+}

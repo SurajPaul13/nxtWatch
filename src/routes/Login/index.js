@@ -8,7 +8,7 @@ import {
   LoginInput,
 } from './styledComponents'
 import {ThemeContext} from '../../ThemeContext'
-import {iconConstants} from '../constants'
+import {iconConstants} from '../../components/constants'
 import './index.css'
 
 class Login extends Component {
@@ -18,7 +18,6 @@ class Login extends Component {
     const {history} = this.props
 
     Cookies.set('jwt-token', token, {expires: 30})
-
     history.replace('/')
   }
 

@@ -1,19 +1,19 @@
-import {useState, useContext, useMemo} from 'react'
+import {useState, useContext, useEffect} from 'react'
 import Cookies from 'js-cookie'
 import {IoIosSearch} from 'react-icons/io'
-import NavBar from '../NavBar'
-import {iconConstants, apiStatusConstants} from '../constants'
+import NavBar from '../../components/NavBar'
+import {iconConstants, apiStatusConstants} from '../../components/constants'
 import {ThemeContext} from '../../ThemeContext'
-import LoaderComponent from '../LoaderComponent'
-import HomeVideoThumbnail from '../HomeVideoThumbnail'
-import FailureView from '../FailureView'
+import LoaderComponent from '../../components/LoaderComponent'
+import VideoSection from '../../components/VideoSection'
+import FailureView from '../../components/FailureView'
+import SideBar from '../../components/Sidebar'
 import {
   SearchInput,
   WarningHeading,
   WarningDescription,
 } from './styledComponents'
 import './index.css'
-import SideBar from '../Sidebar'
 
 const Home = () => {
   const [apiStatus, setApiStatus] = useState(apiStatusConstants.initial)
@@ -23,43 +23,49 @@ const Home = () => {
   const {lightMode} = useContext(ThemeContext)
   const {logoIcon} = iconConstants
 
-  const fetchHomeVideos = async () => {
-    setApiStatus(apiStatusConstants.loading)
+  useEffect(() => {
+    let isMounted = true
 
-    const jwtToken = Cookies.get('jwt-token')
-    const url = 'https://apis.ccbp.in/videos/all?search='
-    const options = {
-      method: 'GET',
-      headers: {
-        Authorization: `Bearer ${jwtToken}`,
-      },
+    const fetchHomeVideos = async () => {
+      setApiStatus(apiStatusConstants.loading)
+
+      const jwtToken = Cookies.get('jwt-token')
+      const url = 'https://apis.ccbp.in/videos/all?search='
+      const options = {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${jwtToken}`,
+        },
+      }
+      const response = await fetch(url, options)
+      if (response.ok && isMounted) {
+        const {videos} = await response.json()
+
+        const convertedData = videos.map(data => {
+          const {channel} = data
+          return {
+            id: channel.id,
+            name: channel.name,
+            profileImageUrl: channel.profile_image_url,
+            publishedAt: data.published_at,
+            thumbnailUrl: data.thumbnail_url,
+            title: data.title,
+            viewCount: data.view_count,
+          }
+        })
+        setHomeVideos(convertedData)
+
+        setApiStatus(apiStatusConstants.success)
+      } else {
+        setApiStatus(apiStatusConstants.failure)
+      }
     }
-    const response = await fetch(url, options)
-    if (response.ok) {
-      const {videos} = await response.json()
 
-      const convertedData = videos.map(data => {
-        const {channel} = data
-        return {
-          id: channel.id,
-          name: channel.name,
-          profileImageUrl: channel.profile_image_url,
-          publishedAt: data.published_at,
-          thumbnailUrl: data.thumbnail_url,
-          title: data.title,
-          viewCount: data.view_count,
-        }
-      })
-      setHomeVideos(convertedData)
-
-      setApiStatus(apiStatusConstants.success)
-    } else {
-      setApiStatus(apiStatusConstants.failure)
-    }
-  }
-
-  useMemo(() => {
     fetchHomeVideos()
+
+    return () => {
+      isMounted = false
+    }
   }, [])
 
   const closePopUp = () => hideIntro(false)
@@ -120,22 +126,7 @@ const Home = () => {
       return <NoSearchResults />
     }
 
-    return (
-      <div className="home-videos-container">
-        {updatedVideos.map(eachVideo => (
-          <HomeVideoThumbnail
-            key={eachVideo.id}
-            id={eachVideo.id}
-            name={eachVideo.name}
-            profileImageUrl={eachVideo.profileImageUrl}
-            publishedAt={eachVideo.publishedAt}
-            thumbnailUrl={eachVideo.thumbnailUrl}
-            title={eachVideo.title}
-            viewCount={eachVideo.viewCount}
-          />
-        ))}
-      </div>
-    )
+    return <VideoSection videos={homeVideos} />
   }
 
   const renderPageContent = () => {

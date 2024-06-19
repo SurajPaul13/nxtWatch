@@ -1,5 +1,8 @@
 import {useContext} from 'react'
-import {WarningHeading, WarningDescription} from '../Home/styledComponents'
+import {
+  WarningHeading,
+  WarningDescription,
+} from '../../routes/Home/styledComponents'
 import MenuContainer from '../MenuContainer'
 import {ThemeContext} from '../../ThemeContext'
 import './index.css'

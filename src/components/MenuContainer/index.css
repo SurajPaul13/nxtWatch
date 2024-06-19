@@ -9,20 +9,34 @@
   width: 100%;
 }
 
-.menu-item {
+.menu-button {
   display: flex;
   align-items: center;
   padding-left: 20px;
+  outline: none;
+  border: none;
+  background-color: transparent;
+  width: 100%;
+  cursor: pointer;
 }
 
-.menu-item:hover {
+.active-menu {
   background-color: #e2e8f0;
-  color: red;
 }
 
-.menu-item:hover p,
-.menu-item:hover .menu-icon {
+.active-menu p,
+.active-menu svg {
   color: red !important;
+  font-weight: bold;
+}
+
+.menu-button:hover {
+  background-color: #cbd5e0;
+}
+
+.menu-button:hover p,
+.menu-button:hover .menu-icon {
+  color: #cc0000 !important;
   font-weight: bold;
 }
 

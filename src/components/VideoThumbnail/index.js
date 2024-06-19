@@ -3,7 +3,7 @@ import {ThemeContext} from '../../ThemeContext'
 import {VideoTitle, VideoDescription} from './styledComponents'
 import './index.css'
 
-const HomeVideoThumbnail = props => {
+const VideoThumbnail = props => {
   const {
     id,
     name,
@@ -32,4 +32,4 @@ const HomeVideoThumbnail = props => {
   )
 }
 
-export default HomeVideoThumbnail
+export default VideoThumbnail

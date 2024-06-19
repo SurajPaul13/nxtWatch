@@ -64,6 +64,18 @@
   height: 100%;
 }
 
+@media (min-width: 576px) {
+  .videos-and-search-container {
+    width: 580px;
+  }
+}
+
+@media (min-width: 768px) {
+  .videos-and-search-container {
+    width: 100%;
+  }
+}
+
 .search-container {
   display: flex;
   align-items: center;
@@ -71,6 +83,14 @@
   margin: auto;
   width: 100%;
   margin-bottom: 20px;
+}
+
+@media (min-width: 576px) {
+  .search-container {
+    margin: 0px;
+    margin-bottom: 10px;
+    width: 350px;
+  }
 }
 
 @media (min-width: 768px) {
