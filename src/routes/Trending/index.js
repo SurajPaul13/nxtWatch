@@ -1,17 +1,15 @@
 import {useContext, useEffect, useState} from 'react'
 import Cookies from 'js-cookie'
 import {FaFire} from 'react-icons/fa'
-import {IoIosSearch} from 'react-icons/io'
 import {ThemeContext} from '../../ThemeContext'
-import MenuItem from '../../components/MenuContainer/styledComponent'
+import {MenuItem} from '../../components/MenuContainer/styledComponent'
 import {apiStatusConstants} from '../../components/constants'
 import './index.css'
 import LoaderComponent from '../../components/LoaderComponent'
 import FailureView from '../../components/FailureView'
-import NavBar from '../../components/NavBar'
-import SideBar from '../../components/Sidebar'
-import {SearchInput} from '../Home/styledComponents'
+import NoSearchResults from '../../components/NoSearchResults'
 import VideoSection from '../../components/VideoSection'
+import SearchComponent from '../../components/SearchComponent'
 
 const Trending = () => {
   const [trendingVideos, setTrendingVideos] = useState([])
@@ -22,6 +20,10 @@ const Trending = () => {
   const handleSearch = event => {
     const {value} = event.target
     setSearch(value)
+  }
+
+  const retrySearch = () => {
+    setSearch('')
   }
 
   useEffect(() => {
@@ -69,12 +71,24 @@ const Trending = () => {
     }
   }, [])
 
+  const TrendingVideos = () => {
+    const updatedVideos = trendingVideos.filter(eachVideo =>
+      eachVideo.title.toLowerCase().includes(search.toLowerCase()),
+    )
+
+    if (updatedVideos.length < 1) {
+      return <NoSearchResults retrySearch={retrySearch} />
+    }
+
+    return <VideoSection videos={updatedVideos} />
+  }
+
   const renderPage = () => {
     switch (apiStatus) {
       case apiStatusConstants.loading:
         return <LoaderComponent />
       case apiStatusConstants.success:
-        return <VideoSection videos={trendingVideos} />
+        return <TrendingVideos />
       case apiStatusConstants.failure:
         return <FailureView />
 
@@ -84,37 +98,25 @@ const Trending = () => {
   }
 
   return (
-    <div
-      className="bg-container"
-      style={{backgroundColor: lightMode ? '#f9f9f9' : '#0f0f0f'}}
-    >
-      <NavBar />
-      <div className="body-container">
-        <SideBar />
-        <div style={{width: '100%'}}>
-          <div className="page-heading">
-            <FaFire className={`menu-icon ${lightMode ? '' : 'dark'}`} />
-            <MenuItem lightMode={lightMode}>Trending</MenuItem>
-          </div>
-          <div className="videos-and-search-container">
-            <div className="search-container">
-              <SearchInput
-                lightMode={lightMode}
-                type="search"
-                placeholder="Search"
-                onChange={handleSearch}
-                value={search}
-              />
-              <button type="button" className="search-btn">
-                <IoIosSearch
-                  style={{color: lightMode ? '' : 'a9a2a2'}}
-                  alt="search"
-                />
-              </button>
-            </div>
-            {renderPage()}
-          </div>
-        </div>
+    <div className="body-main">
+      <div
+        className="page-heading"
+        style={{backgroundColor: lightMode ? '#ebebeb' : '#212121'}}
+      >
+        <FaFire
+          className={`section-icon ${lightMode ? '' : 'dark'}`}
+          style={{backgroundColor: lightMode ? '#cbd5e1' : '#181818'}}
+        />
+        <MenuItem
+          lightMode={lightMode}
+          style={{fontSize: '25px', fontWeight: 'bold'}}
+        >
+          Trending
+        </MenuItem>
+      </div>
+      <div className="videos-and-search-container">
+        <SearchComponent handleSearch={handleSearch} search={search} />
+        {renderPage()}
       </div>
     </div>
   )

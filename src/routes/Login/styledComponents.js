@@ -1,11 +1,11 @@
 import styled from 'styled-components'
 
 export const LoginContainer = styled.div`
-  height: 100vh;
   display: flex;
   align-items: center;
   background-color: ${props => props.bgColor};
   padding: 20px;
+  width: 100%;
 `
 
 export const FormElement = styled.form`

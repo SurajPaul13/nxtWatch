@@ -4,7 +4,7 @@ import {IoIosHome} from 'react-icons/io'
 import {FaFire, FaGamepad} from 'react-icons/fa'
 import {CgPlayListAdd} from 'react-icons/cg'
 import {ThemeContext} from '../../ThemeContext'
-import MenuItem from './styledComponent'
+import {MenuItem, MenuButton} from './styledComponent'
 import './index.css'
 
 const MenuContainer = () => {
@@ -15,46 +15,39 @@ const MenuContainer = () => {
   return (
     <div className="menu-container">
       <Link to="/" className="link-item">
-        <button
-          type="button"
-          className={`menu-button ${activeRoute === '/' ? 'active-menu' : ''}`}
-        >
+        <MenuButton lightMode={lightMode} isActive={activeRoute === '/'}>
           <IoIosHome className={`menu-icon ${lightMode ? '' : 'dark'}`} />
           <MenuItem lightMode={lightMode}>Home</MenuItem>
-        </button>
+        </MenuButton>
       </Link>
       <Link to="/trending" className="link-item">
-        <button
+        <MenuButton
           type="button"
-          className={`menu-button ${
-            activeRoute === '/trending' ? 'active-menu' : ''
-          }`}
+          lightMode={lightMode}
+          isActive={activeRoute === '/trending'}
         >
-          <FaFire className={`menu-icon ${lightMode ? '' : 'dark'}`} />
+          <FaFire />
           <MenuItem lightMode={lightMode}>Trending</MenuItem>
-        </button>
+        </MenuButton>
       </Link>
-      <Link to="/game" className="link-item">
-        <button
+      <Link to="/gaming" className="link-item">
+        <MenuButton
           type="button"
-          className={`menu-button ${
-            activeRoute === '/game' ? 'active-menu' : ''
-          }`}
+          lightMode={lightMode}
+          isActive={activeRoute === '/gaming'}
         >
-          <FaGamepad className={`menu-icon ${lightMode ? '' : 'dark'}`} />
+          <FaGamepad />
           <MenuItem lightMode={lightMode}>Gaming</MenuItem>
-        </button>
+        </MenuButton>
       </Link>
-      <Link to="savedvideos" className="link-item">
-        <button
-          type="button"
-          className={`menu-button ${
-            activeRoute === '/savedvideos' ? 'active-menu' : ''
-          }`}
+      <Link to="saved-videos" className="link-item">
+        <MenuButton
+          lightMode={lightMode}
+          isActive={activeRoute === '/saved-videos'}
         >
-          <CgPlayListAdd className={`menu-icon ${lightMode ? '' : 'dark'}`} />
+          <CgPlayListAdd />
           <MenuItem lightMode={lightMode}>Saved videos</MenuItem>
-        </button>
+        </MenuButton>
       </Link>
     </div>
   )

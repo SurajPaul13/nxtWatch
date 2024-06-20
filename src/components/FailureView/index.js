@@ -4,9 +4,11 @@ import {WarningHeading, WarningDescription} from './styledComponents'
 import {iconConstants} from '../constants'
 import './index.css'
 
-const FailureView = fetchHomeVideos => {
+const FailureView = props => {
   const {lightMode} = useContext(ThemeContext)
   const {failureViewIcon} = iconConstants
+  const {fetchVideos} = props
+  const handleRetry = () => fetchVideos(true)
 
   return (
     <div className="failure-view-container">
@@ -25,7 +27,7 @@ const FailureView = fetchHomeVideos => {
       <WarningDescription lightMode={lightMode}>
         Please try again
       </WarningDescription>
-      <button className="retry-btn" type="button" onClick={fetchHomeVideos}>
+      <button className="retry-btn" type="button" onClick={handleRetry}>
         Retry
       </button>
     </div>

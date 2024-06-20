@@ -19,34 +19,3 @@
   width: 100%;
   cursor: pointer;
 }
-
-.active-menu {
-  background-color: #e2e8f0;
-}
-
-.active-menu p,
-.active-menu svg {
-  color: red !important;
-  font-weight: bold;
-}
-
-.menu-button:hover {
-  background-color: #cbd5e0;
-}
-
-.menu-button:hover p,
-.menu-button:hover .menu-icon {
-  color: #cc0000 !important;
-  font-weight: bold;
-}
-
-.dark {
-  color: #fff !important;
-}
-
-.menu-icon {
-  height: 26px;
-  width: 26px;
-  margin-right: 20px;
-  color: #000;
-}

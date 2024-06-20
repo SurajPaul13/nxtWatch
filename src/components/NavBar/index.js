@@ -12,6 +12,8 @@ const NavBar = () => {
 
   const history = useHistory()
 
+  const token = Cookies.get('jwt-token')
+
   const changeTheme = () => {
     toggleTheme()
   }
@@ -42,7 +44,7 @@ const NavBar = () => {
     : 'https://img.icons8.com/pixels/32/FFFFFF/exit.png'
 
   return (
-    <>
+    <div style={{backgroundColor: lightMode ? 'transparent' : '#181818'}}>
       <div className="navbar">
         <Link to="/">
           <img height="20" src={appLogo} alt="logo" />
@@ -50,7 +52,7 @@ const NavBar = () => {
         <div className="nav-btn-container">
           <button type="button" className="nav-button" onClick={changeTheme}>
             <img
-              className="theme-icon"
+              className="nav-icon"
               width="20"
               height="20"
               src={themeIcon}
@@ -63,36 +65,43 @@ const NavBar = () => {
             onClick={handleMenu}
           >
             <img
-              className="theme-icon"
+              className="nav-icon"
               width="20"
               height="20"
               src={menuIcon}
               alt="menu button"
             />
           </button>
-          <button type="button" className="nav-button hide-profile-menu">
-            <img
-              className="theme-icon"
-              width="20"
-              height="20"
-              src="https://assets.ccbp.in/frontend/react-js/nxt-watch-profile-img.png"
-              alt="profile"
-            />
-          </button>
-          <button
-            type="button"
-            className="nav-button logout-btn"
-            onClick={handleLogout}
-          >
-            <img
-              className="theme-icon logout-icon"
-              width="20"
-              height="20"
-              src={logoutIcon}
-              alt="logout button"
-            />
-            <p className="logout-label">Logout</p>
-          </button>
+          {token ? (
+            <>
+              <button type="button" className="nav-button hide-profile-menu">
+                <img
+                  className="nav-icon"
+                  width="20"
+                  height="20"
+                  src="https://assets.ccbp.in/frontend/react-js/nxt-watch-profile-img.png"
+                  alt="profile"
+                />
+              </button>
+              <button
+                type="button"
+                className="nav-button logout-btn"
+                style={{marginRight: '0px'}}
+                onClick={handleLogout}
+              >
+                <img
+                  className="nav-icon logout-icon"
+                  width="20"
+                  height="20"
+                  src={logoutIcon}
+                  alt="logout button"
+                />
+                <p className="logout-label">Logout</p>
+              </button>
+            </>
+          ) : (
+            ''
+          )}
         </div>
       </div>
       <div
@@ -102,7 +111,7 @@ const NavBar = () => {
       >
         <MenuContainer />
       </div>
-    </>
+    </div>
   )
 }
 

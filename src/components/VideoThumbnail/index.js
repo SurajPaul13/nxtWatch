@@ -1,4 +1,5 @@
 import {useContext} from 'react'
+import {Link} from 'react-router-dom'
 import {ThemeContext} from '../../ThemeContext'
 import {VideoTitle, VideoDescription} from './styledComponents'
 import './index.css'
@@ -17,7 +18,7 @@ const VideoThumbnail = props => {
   const {lightMode} = useContext(ThemeContext)
 
   return (
-    <div id={id} className="thumbnail-container">
+    <Link to={`/videos/${id}`} className="thumbnail-container">
       <img src={thumbnailUrl} alt="video thumbnail" width="100%" />
       <div className="thumbnail-details-container">
         <img src={profileImageUrl} className="profile-img" alt="profile" />
@@ -28,7 +29,7 @@ const VideoThumbnail = props => {
           </VideoDescription>
         </div>
       </div>
-    </div>
+    </Link>
   )
 }
 

@@ -13,13 +13,13 @@
 }
 
 .contact-us-section {
-  padding: 20px;
+  padding-left: 20px;
 }
 
 .contact-us-icons {
   display: flex;
   justify-content: space-between;
-  width: 150px;
-  margin-top: 20px;
-  margin-bottom: 20px;
+  width: 100px;
+  margin-top: 10px;
+  margin-bottom: 10px;
 }

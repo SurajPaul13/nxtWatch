@@ -1,7 +1,6 @@
 @media (min-width: 576px) {
   .videos-container {
     display: flex;
-    justify-content: space-between;
     flex-wrap: wrap;
   }
 }

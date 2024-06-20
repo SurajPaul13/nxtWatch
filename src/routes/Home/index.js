@@ -1,18 +1,11 @@
-import {useState, useContext, useEffect} from 'react'
+import {useState, useEffect} from 'react'
 import Cookies from 'js-cookie'
-import {IoIosSearch} from 'react-icons/io'
-import NavBar from '../../components/NavBar'
 import {iconConstants, apiStatusConstants} from '../../components/constants'
-import {ThemeContext} from '../../ThemeContext'
 import LoaderComponent from '../../components/LoaderComponent'
 import VideoSection from '../../components/VideoSection'
 import FailureView from '../../components/FailureView'
-import SideBar from '../../components/Sidebar'
-import {
-  SearchInput,
-  WarningHeading,
-  WarningDescription,
-} from './styledComponents'
+import NoSearchResults from '../../components/NoSearchResults'
+import SearchComponent from '../../components/SearchComponent'
 import './index.css'
 
 const Home = () => {
@@ -20,48 +13,48 @@ const Home = () => {
   const [homeVideos, setHomeVideos] = useState([])
   const [showIntro, hideIntro] = useState(true)
   const [search, setSearch] = useState('')
-  const {lightMode} = useContext(ThemeContext)
   const {logoIcon} = iconConstants
+
+  const fetchHomeVideos = async isMounted => {
+    setApiStatus(apiStatusConstants.loading)
+
+    const jwtToken = Cookies.get('jwt-token')
+    const url = 'https://apis.ccbp.in/videos/all?search='
+    const options = {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${jwtToken}`,
+      },
+    }
+    const response = await fetch(url, options)
+    if (response.ok && isMounted) {
+      const {videos} = await response.json()
+
+      const convertedData = videos.map(data => {
+        const {channel} = data
+
+        return {
+          id: data.id,
+          name: channel.name,
+          profileImageUrl: channel.profile_image_url,
+          publishedAt: data.published_at,
+          thumbnailUrl: data.thumbnail_url,
+          title: data.title,
+          viewCount: data.view_count,
+        }
+      })
+      setHomeVideos(convertedData)
+
+      setApiStatus(apiStatusConstants.success)
+    } else {
+      setApiStatus(apiStatusConstants.failure)
+    }
+  }
 
   useEffect(() => {
     let isMounted = true
 
-    const fetchHomeVideos = async () => {
-      setApiStatus(apiStatusConstants.loading)
-
-      const jwtToken = Cookies.get('jwt-token')
-      const url = 'https://apis.ccbp.in/videos/all?search='
-      const options = {
-        method: 'GET',
-        headers: {
-          Authorization: `Bearer ${jwtToken}`,
-        },
-      }
-      const response = await fetch(url, options)
-      if (response.ok && isMounted) {
-        const {videos} = await response.json()
-
-        const convertedData = videos.map(data => {
-          const {channel} = data
-          return {
-            id: channel.id,
-            name: channel.name,
-            profileImageUrl: channel.profile_image_url,
-            publishedAt: data.published_at,
-            thumbnailUrl: data.thumbnail_url,
-            title: data.title,
-            viewCount: data.view_count,
-          }
-        })
-        setHomeVideos(convertedData)
-
-        setApiStatus(apiStatusConstants.success)
-      } else {
-        setApiStatus(apiStatusConstants.failure)
-      }
-    }
-
-    fetchHomeVideos()
+    fetchHomeVideos(isMounted)
 
     return () => {
       isMounted = false
@@ -79,34 +72,14 @@ const Home = () => {
     setSearch('')
   }
 
-  const NoSearchResults = () => (
-    <div className="failure-view-container">
-      <img
-        src="https://assets.ccbp.in/frontend/react-js/nxt-watch-no-search-results-img.png "
-        alt="no videos"
-        height="300px"
-        className="failure-img"
-      />
-      <WarningHeading lightMode={lightMode}>
-        No search results found
-      </WarningHeading>
-      <WarningDescription lightMode={lightMode}>
-        Try different keyword or remove search filter
-      </WarningDescription>
-      <button className="retry-btn" type="button" onClick={retrySearch}>
-        Retry
-      </button>
-    </div>
-  )
-
   const HomeBanner = () => (
     <div className={`intro-card ${showIntro ? '' : 'hide-intro'}`}>
       <button className="close-intro-popup" type="button" onClick={closePopUp}>
         X
       </button>
       <img
-        height="35px"
-        width="155px"
+        height="25px"
+        width="105px"
         src={logoIcon.light}
         alt="nxt watch logo"
       />
@@ -123,10 +96,10 @@ const Home = () => {
     )
 
     if (updatedVideos.length < 1) {
-      return <NoSearchResults />
+      return <NoSearchResults retrySearch={retrySearch} />
     }
 
-    return <VideoSection videos={homeVideos} />
+    return <VideoSection videos={updatedVideos} />
   }
 
   const renderPageContent = () => {
@@ -138,7 +111,7 @@ const Home = () => {
         return <HomeVideos />
 
       case apiStatusConstants.failure:
-        return <FailureView />
+        return <FailureView fetchVideos={fetchHomeVideos} />
 
       default:
         return null
@@ -146,34 +119,11 @@ const Home = () => {
   }
 
   return (
-    <div
-      className="main-app"
-      style={{backgroundColor: lightMode ? '#f9f9f9' : '#181818'}}
-    >
-      <NavBar />
-      <div className="home-container">
-        <SideBar />
-        <div className="banner-and-videos-container">
-          <HomeBanner />
-          <div className="videos-and-search-container">
-            <div className="search-container">
-              <SearchInput
-                lightMode={lightMode}
-                type="search"
-                placeholder="Search"
-                onChange={handleSearch}
-                value={search}
-              />
-              <button type="button" className="search-btn">
-                <IoIosSearch
-                  style={{color: lightMode ? '' : 'a9a2a2'}}
-                  alt="search"
-                />
-              </button>
-            </div>
-            {renderPageContent()}
-          </div>
-        </div>
+    <div className="body-main">
+      <HomeBanner />
+      <div className="videos-and-search-container">
+        <SearchComponent handleSearch={handleSearch} search={search} />
+        {renderPageContent()}
       </div>
     </div>
   )

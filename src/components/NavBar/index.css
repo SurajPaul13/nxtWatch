@@ -8,13 +8,6 @@
 .nav-btn-container {
   display: flex;
   justify-content: space-between;
-  width: 100px;
-}
-
-@media (min-width: 768px) {
-  .nav-btn-container {
-    width: 170px;
-  }
 }
 
 .nav-button {
@@ -22,9 +15,10 @@
   outline: none;
   border: none;
   cursor: pointer;
+  margin-right: 20px;
 }
 
-.theme-icon {
+.nav-icon {
   height: 20px;
   width: 20px;
 }
@@ -76,5 +70,5 @@
 }
 
 .display-menu {
-  height: 210px;
+  height: 190px;
 }

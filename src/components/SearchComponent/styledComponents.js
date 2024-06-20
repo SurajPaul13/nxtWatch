@@ -1,13 +1,6 @@
 import styled from 'styled-components'
 
-export const HomeVideosContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  padding: 10px;
-  height: 100%;
-`
-
-export const SearchInput = styled.input`
+const SearchInput = styled.input`
   display: inline-block;
   padding-left: 10px;
   width: 85%;
@@ -18,6 +11,4 @@ export const SearchInput = styled.input`
   background-color: ${props => (props.lightMode ? '#f9f9f9' : '#181818')};
 `
 
-export const ContactUsHeading = styled.h3`
-  color: ${props => (props.lightMode ? '' : '')};
-`
+export default SearchInput

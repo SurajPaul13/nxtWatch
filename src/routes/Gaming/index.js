@@ -2,12 +2,10 @@ import {useContext, useEffect, useState} from 'react'
 import Cookies from 'js-cookie'
 import {FaGamepad} from 'react-icons/fa'
 import {ThemeContext} from '../../ThemeContext'
-import MenuItem from '../../components/MenuContainer/styledComponent'
+import {MenuItem} from '../../components/MenuContainer/styledComponent'
 import {apiStatusConstants} from '../../components/constants'
 import LoaderComponent from '../../components/LoaderComponent'
 import FailureView from '../../components/FailureView'
-import NavBar from '../../components/NavBar'
-import SideBar from '../../components/Sidebar'
 import GamingVideoThumbnail from '../../components/GamingVideoThumbnail'
 import './index.css'
 
@@ -16,7 +14,7 @@ const Gaming = () => {
   const [apiStatus, setApiStatus] = useState(apiStatusConstants.initial)
   const {lightMode} = useContext(ThemeContext)
 
-  const fetchVideos = async () => {
+  const fetchGameVideos = async isMounted => {
     setApiStatus(apiStatusConstants.loading)
 
     const token = Cookies.get('jwt-token')
@@ -30,7 +28,7 @@ const Gaming = () => {
 
     const response = await fetch(url, options)
 
-    if (response.ok) {
+    if (response.ok && isMounted) {
       const {videos} = await response.json()
 
       const convertedData = videos.map(data => ({
@@ -46,7 +44,15 @@ const Gaming = () => {
     }
   }
 
-  useEffect(() => fetchVideos(), [])
+  useEffect(() => {
+    let isMounted = true
+
+    fetchGameVideos(isMounted)
+
+    return () => {
+      isMounted = false
+    }
+  }, [])
 
   const RenderGamingVideos = () =>
     gamingVideos.map(eachVideo => (
@@ -60,28 +66,30 @@ const Gaming = () => {
       case apiStatusConstants.success:
         return <RenderGamingVideos />
       case apiStatusConstants.failure:
-        return <FailureView />
+        return <FailureView fetchVideos={fetchGameVideos} />
       default:
         return null
     }
   }
 
   return (
-    <div
-      className="main-container"
-      style={{backgroundColor: lightMode ? '#f9f9f9' : '#0f0f0f'}}
-    >
-      <NavBar />
-      <div className="body-container">
-        <SideBar />
-        <div style={{width: '100%'}}>
-          <div className="page-heading">
-            <FaGamepad className={`menu-icon ${lightMode ? '' : 'dark'}`} />
-            <MenuItem lightMode={lightMode}>Gaming</MenuItem>
-          </div>
-          <div className="gaming-videos-container">{renderGamingPage()}</div>
-        </div>
+    <div className="body-main">
+      <div
+        className="page-heading"
+        style={{backgroundColor: lightMode ? '#ebebeb' : '#212121'}}
+      >
+        <FaGamepad
+          className={`section-icon ${lightMode ? '' : 'dark'}`}
+          style={{backgroundColor: lightMode ? '#cbd5e1' : '#181818'}}
+        />
+        <MenuItem
+          lightMode={lightMode}
+          style={{fontSize: '25px', fontWeight: 'bold'}}
+        >
+          Gaming
+        </MenuItem>
       </div>
+      <div className="gaming-videos-container">{renderGamingPage()}</div>
     </div>
   )
 }
