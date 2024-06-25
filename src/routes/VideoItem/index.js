@@ -19,14 +19,19 @@ import './index.css'
 const VideoItem = props => {
   const [videoDetails, setVideoDetails] = useState({})
   const [apiStatus, setApiStatus] = useState(apiStatusConstants.initial)
-  const [isSaved, setIsSaved] = useState(false)
   const {match} = props
   const {params} = match
   const {id: videoId} = params
 
-  const {lightMode, toggleSaveVideo} = useContext(ThemeContext)
+  const {lightMode, toggleSaveVideo, showMenu, toggleMenu} = useContext(
+    ThemeContext,
+  )
 
   const fetchVideoItem = async isMounted => {
+    if (showMenu) {
+      toggleMenu()
+    }
+
     setApiStatus(apiStatusConstants.loading)
     const url = `https://apis.ccbp.in/videos/${videoId}`
     const token = Cookies.get('jwt-token')
@@ -57,13 +62,16 @@ const VideoItem = props => {
         title: videoItemDetails.title,
         videoUrl: videoItemDetails.video_url,
         thumbnailUrl: videoItemDetails.thumbnail_url,
-        channelName: channel.name,
+        name: channel.name,
         profileImageUrl: channel.profile_image_url,
         subscriberCount: channel.subscriber_count,
         viewCount: videoItemDetails.view_count,
         publishedAt: videoItemDetails.published_at,
         description: videoItemDetails.description,
         dateDifference,
+        isLiked: false,
+        isDisliked: false,
+        isSaved: false,
       }
       setVideoDetails(convertedData)
       setApiStatus(apiStatusConstants.success)
@@ -83,8 +91,27 @@ const VideoItem = props => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
+  const handleLike = () => {
+    setVideoDetails(prevState => ({
+      ...prevState,
+      isLiked: !prevState.isLiked,
+      isDisliked: false,
+    }))
+  }
+
+  const handleDislike = () => {
+    setVideoDetails(prevState => ({
+      ...prevState,
+      isDisliked: !prevState.isDisliked,
+      isLiked: false,
+    }))
+  }
+
   const handleSave = () => {
-    setIsSaved(prevState => !prevState)
+    setVideoDetails(prevState => ({
+      ...prevState,
+      isSaved: !prevState.isSaved,
+    }))
     toggleSaveVideo(videoDetails)
   }
 
@@ -92,16 +119,19 @@ const VideoItem = props => {
     title,
     description,
     videoUrl,
-    channelName,
+    name,
     profileImageUrl,
     subscriberCount,
     viewCount,
     dateDifference,
+    isLiked,
+    isDisliked,
+    isSaved,
   } = videoDetails
 
   const VideoItemComponent = () => (
     <div className="video-item-container">
-      <ReactPlayer height="200px" width="100%" url={videoUrl} />
+      <ReactPlayer className="video-item" url={videoUrl} />
       <div className="video-details">
         <VideoTitle
           lightMode={lightMode}
@@ -119,16 +149,29 @@ const VideoItem = props => {
           </VideoDescription>
         </div>
         <div className="emotion-btns-container">
-          <EmotionButton type="button" className="video-reaction-btn">
+          <EmotionButton
+            isActive={isLiked}
+            lightMode={lightMode}
+            type="button"
+            className="video-reaction-btn"
+            onClick={handleLike}
+          >
             <BiLike style={{marginRight: '6px'}} />
             <p>Like</p>
           </EmotionButton>
-          <EmotionButton type="button" className="video-reaction-btn">
+          <EmotionButton
+            isActive={isDisliked}
+            lightMode={lightMode}
+            type="button"
+            className="video-reaction-btn"
+            onClick={handleDislike}
+          >
             <BiDislike style={{marginRight: '6px'}} />
             <p>Dislike</p>
           </EmotionButton>
           <EmotionButton
             isActive={isSaved}
+            lightMode={lightMode}
             type="button"
             className="video-reaction-btn"
             onClick={handleSave}
@@ -139,13 +182,9 @@ const VideoItem = props => {
         </div>
         <hr />
         <div className="profile-details-container">
-          <img
-            src={profileImageUrl}
-            alt={channelName}
-            className="profile-img"
-          />
+          <img src={profileImageUrl} alt={name} className="profile-img" />
           <div className="video-details-container" style={{fontSize: '10px'}}>
-            <VideoTitle lightMode={lightMode}>{channelName}</VideoTitle>
+            <VideoTitle lightMode={lightMode}>{name}</VideoTitle>
             <VideoDescription lightMode={lightMode}>
               {subscriberCount} subscribers
             </VideoDescription>

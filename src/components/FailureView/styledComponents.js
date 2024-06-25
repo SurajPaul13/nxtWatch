@@ -8,4 +8,5 @@ export const WarningHeading = styled.h3`
 export const WarningDescription = styled.p`
   color: ${props => (props.lightMode ? '#475569' : '#94a3b8')};
   margin: 5px;
+  text-align: center;
 `

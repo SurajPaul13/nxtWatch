@@ -12,9 +12,13 @@ import './index.css'
 const Gaming = () => {
   const [gamingVideos, setVideos] = useState([])
   const [apiStatus, setApiStatus] = useState(apiStatusConstants.initial)
-  const {lightMode} = useContext(ThemeContext)
+  const {lightMode, showMenu, toggleMenu} = useContext(ThemeContext)
 
   const fetchGameVideos = async isMounted => {
+    if (showMenu) {
+      toggleMenu()
+    }
+
     setApiStatus(apiStatusConstants.loading)
 
     const token = Cookies.get('jwt-token')
@@ -52,6 +56,7 @@ const Gaming = () => {
     return () => {
       isMounted = false
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const RenderGamingVideos = () =>

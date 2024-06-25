@@ -4,6 +4,13 @@
   width: 100%;
 }
 
+@media (max-width: 640px) {
+  .video-item {
+    height: 30vh !important;
+    width: inherit !important;
+  }
+}
+
 .video-details {
   padding: 10px;
 }

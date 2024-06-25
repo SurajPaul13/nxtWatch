@@ -1,6 +1,6 @@
 import Cookies from 'js-cookie'
-import {Component} from 'react'
-import {Redirect} from 'react-router-dom'
+import {useState, useContext} from 'react'
+import {Redirect, useHistory} from 'react-router-dom'
 import {
   LoginContainer,
   FormElement,
@@ -11,24 +11,32 @@ import {ThemeContext} from '../../ThemeContext'
 import {iconConstants} from '../../components/constants'
 import './index.css'
 
-class Login extends Component {
-  state = {username: '', password: '', errorMsg: '', showError: false}
+const Login = () => {
+  const initialState = {
+    username: '',
+    password: '',
+    errorMsg: '',
+    showError: false,
+  }
 
-  onLoginSuccess = token => {
-    const {history} = this.props
+  const [state, setState] = useState(initialState)
+  const {lightMode, toggleLoginStatus} = useContext(ThemeContext)
+  const history = useHistory()
 
+  const onLoginSuccess = token => {
+    toggleLoginStatus()
     Cookies.set('jwt-token', token, {expires: 30})
     history.replace('/')
   }
 
-  onLoginFailure = errorMsg => {
-    this.setState({errorMsg, showError: true})
+  const onLoginFailure = errorMsg => {
+    setState(prevState => ({...prevState, errorMsg, showError: true}))
   }
 
-  handleLogin = async event => {
+  const handleLogin = async event => {
     event.preventDefault()
 
-    const {username, password} = this.state
+    const {username, password} = state
     const userDetails = {
       username,
       password,
@@ -43,79 +51,66 @@ class Login extends Component {
     const response = await fetch(url, options)
     const data = await response.json()
     if (response.ok === true) {
-      this.onLoginSuccess(data.jwt_token)
+      onLoginSuccess(data.jwt_token)
     } else {
-      this.onLoginFailure(data.error_msg)
+      onLoginFailure(data.error_msg)
     }
   }
 
-  handleUsername = event => {
+  const handleUsername = event => {
     event.preventDefault()
     const username = event.target.value
-    this.setState({username, showError: false})
+    setState(prevState => ({...prevState, username, showError: false}))
   }
 
-  handlePassword = event => {
+  const handlePassword = event => {
     event.preventDefault()
     const password = event.target.value
-    this.setState({password, showError: false})
+    setState(prevState => ({...prevState, password, showError: false}))
+  }
+  const {username, password, errorMsg, showError} = state
+  const {logoIcon} = iconConstants
+
+  const logoSrc = lightMode ? logoIcon.light : logoIcon.dark
+
+  const token = Cookies.get('jwt-token')
+  if (token !== undefined) {
+    return <Redirect to="/" />
   }
 
-  render() {
-    const {username, password, errorMsg, showError} = this.state
-    const {logoIcon} = iconConstants
-
-    const token = Cookies.get('jwt-token')
-    if (token !== undefined) {
-      return <Redirect to="/" />
-    }
-
-    return (
-      <ThemeContext.Consumer>
-        {theme => {
-          const {lightMode} = theme
-          const logoSrc = lightMode ? logoIcon.light : logoIcon.dark
-
-          return (
-            <LoginContainer bgColor={lightMode ? '' : '#212121'}>
-              <FormElement
-                bgColor={lightMode ? '' : '#000'}
-                onSubmit={this.handleLogin}
-              >
-                <img src={logoSrc} alt="logo" className="login-app-logo" />
-                <div className="login-labels-container">
-                  <Label>USERNAME</Label>
-                  <LoginInput
-                    type="text"
-                    placeholder="Enter username"
-                    onChange={this.handleUsername}
-                    value={username}
-                  />
-                </div>
-                <div className="login-labels-container">
-                  <Label>PASSWORD</Label>
-                  <LoginInput
-                    type="password"
-                    placeholder="Enter password"
-                    onChange={this.handlePassword}
-                    value={password}
-                  />
-                </div>
-                <button type="submit" className="login-btn">
-                  Login
-                </button>
-                {showError ? (
-                  <p style={{display: 'block', color: 'red'}}>*{errorMsg}</p>
-                ) : (
-                  ''
-                )}
-              </FormElement>
-            </LoginContainer>
-          )
-        }}
-      </ThemeContext.Consumer>
-    )
-  }
+  return (
+    <LoginContainer bgColor={lightMode ? '' : '#212121'}>
+      <FormElement bgColor={lightMode ? '' : '#000'} onSubmit={handleLogin}>
+        <img src={logoSrc} alt="logo" className="login-app-logo" />
+        <div className="login-labels-container">
+          <Label>USERNAME</Label>
+          <LoginInput
+            type="text"
+            placeholder="Enter username"
+            onChange={handleUsername}
+            value={username}
+          />
+        </div>
+        <div className="login-labels-container">
+          <Label>PASSWORD</Label>
+          <LoginInput
+            type="password"
+            placeholder="Enter password"
+            onChange={handlePassword}
+            value={password}
+          />
+        </div>
+        <button type="submit" className="login-btn">
+          Login
+        </button>
+        {showError ? (
+          <p style={{display: 'block', color: 'red'}}>*{errorMsg}</p>
+        ) : (
+          ''
+        )}
+      </FormElement>
+    </LoginContainer>
+  )
 }
 
 export default Login

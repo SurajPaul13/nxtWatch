@@ -1,0 +1,32 @@
+.logout-card-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  background-color: rgba(0, 0, 0.5, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  width: 100vw;
+}
+
+.logout-card {
+  background-color: #fff;
+  border-radius: 10px;
+  height: 170px;
+  width: 350px;
+  box-shadow: (1, 1, 1, red);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.logout-btn-options {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 200px;
+  margin: 20px;
+}

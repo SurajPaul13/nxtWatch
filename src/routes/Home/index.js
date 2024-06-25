@@ -1,4 +1,4 @@
-import {useState, useEffect} from 'react'
+import {useState, useEffect, useContext} from 'react'
 import Cookies from 'js-cookie'
 import {iconConstants, apiStatusConstants} from '../../components/constants'
 import LoaderComponent from '../../components/LoaderComponent'
@@ -6,6 +6,7 @@ import VideoSection from '../../components/VideoSection'
 import FailureView from '../../components/FailureView'
 import NoSearchResults from '../../components/NoSearchResults'
 import SearchComponent from '../../components/SearchComponent'
+import {ThemeContext} from '../../ThemeContext'
 import './index.css'
 
 const Home = () => {
@@ -14,8 +15,12 @@ const Home = () => {
   const [showIntro, hideIntro] = useState(true)
   const [search, setSearch] = useState('')
   const {logoIcon} = iconConstants
+  const {showMenu, toggleMenu} = useContext(ThemeContext)
 
   const fetchHomeVideos = async isMounted => {
+    if (showMenu) {
+      toggleMenu()
+    }
     setApiStatus(apiStatusConstants.loading)
 
     const jwtToken = Cookies.get('jwt-token')
@@ -59,6 +64,7 @@ const Home = () => {
     return () => {
       isMounted = false
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const closePopUp = () => hideIntro(false)
@@ -74,15 +80,22 @@ const Home = () => {
 
   const HomeBanner = () => (
     <div className={`intro-card ${showIntro ? '' : 'hide-intro'}`}>
-      <button className="close-intro-popup" type="button" onClick={closePopUp}>
-        X
-      </button>
-      <img
-        height="25px"
-        width="105px"
-        src={logoIcon.light}
-        alt="nxt watch logo"
-      />
+      <div style={{display: 'flex'}}>
+        <img
+          height="25px"
+          width="105px"
+          src={logoIcon.light}
+          alt="nxt watch logo"
+        />
+        <button
+          className="close-intro-popup"
+          type="button"
+          onClick={closePopUp}
+        >
+          X
+        </button>
+      </div>
+
       <p>Buy Nxt Watch Premium prepaid plans with UPI</p>
       <button className="get-it-now-btn" type="button">
         GET IT NOW

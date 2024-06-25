@@ -40,7 +40,7 @@ const MenuContainer = () => {
           <MenuItem lightMode={lightMode}>Gaming</MenuItem>
         </MenuButton>
       </Link>
-      <Link to="saved-videos" className="link-item">
+      <Link to="/saved-videos" className="link-item">
         <MenuButton
           lightMode={lightMode}
           isActive={activeRoute === '/saved-videos'}

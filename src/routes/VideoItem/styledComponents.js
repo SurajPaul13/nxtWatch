@@ -6,7 +6,9 @@ export const EmotionButton = styled.button`
   display: flex;
   align-items: center;
   margin-right: 15px;
+  color: ${props => (props.lightMode ? '' : '#fff')};
   color: ${props => (props.isActive ? 'blue' : '')};
   font-size: 12px;
   background-color: transparent;
+  cursor: pointer;
 `

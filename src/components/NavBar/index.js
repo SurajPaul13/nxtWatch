@@ -1,16 +1,18 @@
-import {useState, useContext} from 'react'
+import {useContext} from 'react'
 import Cookies from 'js-cookie'
-import {Link, withRouter, useHistory} from 'react-router-dom'
+import {Link} from 'react-router-dom'
 import {ThemeContext} from '../../ThemeContext'
 import MenuContainer from '../MenuContainer'
 import './index.css'
 
 const NavBar = () => {
-  const [showMenu, setMenu] = useState(false)
-
-  const {lightMode, toggleTheme} = useContext(ThemeContext)
-
-  const history = useHistory()
+  const {
+    lightMode,
+    showMenu,
+    toggleTheme,
+    toggleMenu,
+    toggleLogoutPopup,
+  } = useContext(ThemeContext)
 
   const token = Cookies.get('jwt-token')
 
@@ -19,12 +21,11 @@ const NavBar = () => {
   }
 
   const handleMenu = () => {
-    setMenu(prevMenu => !prevMenu)
+    toggleMenu()
   }
 
   const handleLogout = () => {
-    Cookies.remove('jwt-token')
-    history.replace('/login')
+    toggleLogoutPopup()
   }
 
   const appLogo = lightMode
@@ -115,4 +116,4 @@ const NavBar = () => {
   )
 }
 
-export default withRouter(NavBar)
+export default NavBar

@@ -15,7 +15,7 @@ const Trending = () => {
   const [trendingVideos, setTrendingVideos] = useState([])
   const [search, setSearch] = useState('')
   const [apiStatus, setApiStatus] = useState(apiStatusConstants.initial)
-  const {lightMode} = useContext(ThemeContext)
+  const {lightMode, showMenu, toggleMenu} = useContext(ThemeContext)
 
   const handleSearch = event => {
     const {value} = event.target
@@ -30,6 +30,9 @@ const Trending = () => {
     let isMounted = true
 
     const fetchTrendingVideos = async () => {
+      if (showMenu) {
+        toggleMenu()
+      }
       setApiStatus(apiStatusConstants.loading)
 
       const token = Cookies.get('jwt-token')
@@ -69,6 +72,7 @@ const Trending = () => {
     return () => {
       isMounted = false
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const TrendingVideos = () => {
